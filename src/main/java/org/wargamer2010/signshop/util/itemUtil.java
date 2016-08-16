@@ -148,13 +148,6 @@ public class itemUtil {
 
     public static String formatData(MaterialData data, short durability) {
         String sData;
-        // Lookup spout custom material
-        if(Bukkit.getServer().getPluginManager().isPluginEnabled("Spout")) {
-            sData = spoutUtil.getName(data, durability);
-            if(sData != null)
-                return sData;
-        }
-
         // For some reason running tostring on data when it's from an attachable material
         // will cause a NullPointerException, thus if we're dealing with an attachable, go the easy way :)
         if(data instanceof SimpleAttachableMaterialData)

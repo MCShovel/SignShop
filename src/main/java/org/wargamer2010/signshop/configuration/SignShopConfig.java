@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeMap;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.wargamer2010.signshop.util.signshopUtil;
 import org.wargamer2010.signshop.hooks.HookManager;
 import org.wargamer2010.signshop.SignShop;
@@ -165,8 +164,6 @@ public class SignShopConfig {
     private static void setupSpecialsOps() {
         SpecialsOps.add(new ConvertChestshop());
         SpecialsOps.add(new CopySign());
-        if(Bukkit.getServer().getPluginManager().getPlugin("ShowCaseStandalone") != null)
-            SpecialsOps.add(new LinkShowcase());
         SpecialsOps.add(new LinkSpecialSign());
         SpecialsOps.add(new ChangeOwner());
         SpecialsOps.add(new LinkAdditionalBlocks());

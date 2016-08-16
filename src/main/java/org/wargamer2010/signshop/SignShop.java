@@ -22,13 +22,11 @@ import org.wargamer2010.signshop.configuration.SignShopConfig;
 import org.wargamer2010.signshop.configuration.Storage;
 import org.wargamer2010.signshop.listeners.*;
 import org.wargamer2010.signshop.listeners.sslisteners.*;
-import org.wargamer2010.signshop.metrics.setupMetrics;
 import org.wargamer2010.signshop.money.MoneyModifierManager;
 import org.wargamer2010.signshop.player.PlayerMetadata;
 import org.wargamer2010.signshop.timing.TimeManager;
 import org.wargamer2010.signshop.util.WebUtil;
 import org.wargamer2010.signshop.util.commandUtil;
-import org.wargamer2010.skript.EvtSSPretransaction;
 
 public class SignShop extends JavaPlugin{
     private final SignShopPlayerListener playerListener = new SignShopPlayerListener();
@@ -48,10 +46,6 @@ public class SignShop extends JavaPlugin{
 
     // Vault
     private Vault vault = null;
-    private setupMetrics metricsSetup = null;
-
-    // Skript
-    private static boolean registeredWithSkript = false;
 
     // Commands
     private static CommandDispatcher commandDispatcher = new CommandDispatcher();
@@ -86,13 +80,6 @@ public class SignShop extends JavaPlugin{
         }
 
         instance = this;
-        metricsSetup = new setupMetrics(this);
-        if(!metricsSetup.isOptOut()) {
-            if(metricsSetup.setup())
-                log("Succesfully started Metrics, see http://mcstats.org for more information.", Level.INFO);
-            else
-                log("Could not start Metrics, see http://mcstats.org for more information.", Level.INFO);
-        }
 
         setupCommands();
 
@@ -136,15 +123,6 @@ public class SignShop extends JavaPlugin{
             // Register events
             pm.registerEvents(playerListener, this);
             pm.registerEvents(blockListener, this);
-            pm.registerEvents(new SignShopWorthListener(), this);
-            if(SignShopConfig.getDisableEssentialsSigns()) {
-                SignShopServerListener SListener = new SignShopServerListener(getServer());
-                pm.registerEvents(SListener, this);
-            }
-            if(!registeredWithSkript && pm.getPlugin("Skript") != null) {
-                EvtSSPretransaction.register();
-                registeredWithSkript = true;
-            }
             registerSSListeners();
             log("v" + pdfFile.getVersion() + " Enabled", Level.INFO);
         } else {
@@ -232,19 +210,13 @@ public class SignShop extends JavaPlugin{
         pm.registerEvents(new PermissionChecker(), this);
         pm.registerEvents(new PermitChecker(), this);
         pm.registerEvents(new ShopUpdater(), this);
-        pm.registerEvents(new GetPriceFromWorth(), this);
         pm.registerEvents(new ShopCooldown(), this);
-        pm.registerEvents(new NotificationsHooker(), this);
         pm.registerEvents(new StockChecker(), this);
         pm.registerEvents(new TimedCommandListener(), this);
         pm.registerEvents(new MoneyModifierListener(), this);
 
-        DynmapManager dmm = new DynmapManager();
-        if(SignShopConfig.getEnableDynmapSupport())
-            pm.registerEvents(dmm, this);
         if(SignShopConfig.getEnableShopPlotSupport()) {
             pm.registerEvents(new WorldGuardChecker(), this);
-            pm.registerEvents(new TownyChecker(), this);
         }
 
         // Money Transactions Types

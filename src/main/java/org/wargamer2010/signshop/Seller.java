@@ -2,18 +2,14 @@ package org.wargamer2010.signshop;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import org.wargamer2010.signshop.util.itemUtil;
-import com.kellerkindt.scs.*;
 import java.util.LinkedHashMap;
-import java.util.logging.Level;
 import org.bukkit.block.Sign;
-import org.bukkit.plugin.Plugin;
 import org.wargamer2010.signshop.blocks.SignShopBooks;
 import org.wargamer2010.signshop.blocks.SignShopItemMeta;
 import org.wargamer2010.signshop.player.PlayerIdentifier;
@@ -126,20 +122,6 @@ public class Seller {
 
     public void cleanUp() {
         if(miscProps.containsKey("showcaselocation")) {
-            if(Bukkit.getServer().getPluginManager().getPlugin("ShowCaseStandalone") == null)
-                return;
-            Location loc = signshopUtil.convertStringToLocation(miscProps.get("showcaselocation"), Bukkit.getWorld(world));
-            ShowCaseStandalone scs = (ShowCaseStandalone) Bukkit.getServer().getPluginManager().getPlugin("ShowCaseStandalone");
-            com.kellerkindt.scs.shops.Shop shop;
-            try {
-                shop = scs.getShopHandler().getShop(Bukkit.getWorld(world).getBlockAt(loc));
-            } catch(Exception ex) {
-                SignShop.log(String.format("Caught an exception (%s) while attempting to remove showcase for shop at (%s, %s, %s)"
-                        , ex.getMessage(), loc.getX(), loc.getY(), loc.getZ()), Level.WARNING);
-                return;
-            }
-            if(shop != null)
-                scs.getShopHandler().removeShop(shop);
         }
     }
 
